@@ -2,26 +2,192 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Domain Report: {{ domain }}</title>
+  <title>Domain Analysis Report: {{ domain }}</title>
   <style>
-    body { font-family: Arial, sans-serif; font-size: 12px; }
-    h1 { color: #0d6efd; }
-    h2 { margin-top: 1em; }
-    pre { white-space: pre-wrap; }
-    table { width: 100%; border-collapse: collapse; margin-top: 0.5em; }
-    th, td { border: 1px solid #ccc; padding: 4px; font-size: 11px; }
+    body { 
+      font-family: Arial, sans-serif; 
+      font-size: 12px; 
+      line-height: 1.4;
+      margin: 20px;
+    }
+    h1 { 
+      color: #0d6efd; 
+      border-bottom: 2px solid #0d6efd;
+      padding-bottom: 10px;
+    }
+    h2 { 
+      margin-top: 2em; 
+      color: #333;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 5px;
+    }
+    h3 {
+      margin-top: 1.5em;
+      color: #666;
+    }
+    pre { 
+      white-space: pre-wrap; 
+      background-color: #f8f9fa;
+      padding: 10px;
+      border: 1px solid #dee2e6;
+      border-radius: 4px;
+      font-size: 10px;
+    }
+    table { 
+      width: 100%; 
+      border-collapse: collapse; 
+      margin-top: 0.5em; 
+      margin-bottom: 1em;
+    }
+    th, td { 
+      border: 1px solid #ccc; 
+      padding: 6px; 
+      font-size: 11px; 
+      text-align: left;
+    }
+    th {
+      background-color: #f8f9fa;
+      font-weight: bold;
+    }
+    .header-info {
+      background-color: #f8f9fa;
+      padding: 15px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
+    .section {
+      margin-bottom: 25px;
+    }
+    .no-data {
+      color: #6c757d;
+      font-style: italic;
+    }
   </style>
 </head>
 <body>
-  <h1>Domain Report: {{ domain }}</h1>
+  <div class="header-info">
+    <h1>Domain Analysis Report</h1>
+    <p><strong>Domain:</strong> {{ domain }}</p>
+    <p><strong>Generated:</strong> {{ current_time }}</p>
+    <p><strong>Tool:</strong> Portable OSINT Tool</p>
+  </div>
 
-  <h2>WHOIS</h2>
-  <pre>{{ whois_text }}</pre>
+  <div class="section">
+    <h2>Executive Summary</h2>
+    <p>This report contains the results of domain intelligence analysis for <strong>{{ domain }}</strong>, including WHOIS information, network details, DNS records, and subdomain enumeration.</p>
+  </div>
 
-  <h2>RDAP</h2>
-  <pre>{{ rdap_text }}</pre>
+  <div class="section">
+    <h2>WHOIS Information</h2>
+    {% if whois_text %}
+      {% set whois_data = whois_text | from_json %}
+      {% if whois_data.error %}
+        <p class="no-data">{{ whois_data.error }}</p>
+      {% else %}
+        <table>
+          <tr><th width="25%">Field</th><th>Value</th></tr>
+          {% if whois_data.registrar %}
+            <tr><td>Registrar</td><td>{{ whois_data.registrar }}</td></tr>
+          {% endif %}
+          {% if whois_data.creation_date %}
+            <tr><td>Creation Date</td><td>{{ whois_data.creation_date }}</td></tr>
+          {% endif %}
+          {% if whois_data.expiration_date %}
+            <tr><td>Expiration Date</td><td>{{ whois_data.expiration_date }}</td></tr>
+          {% endif %}
+          {% if whois_data.updated_date %}
+            <tr><td>Updated Date</td><td>{{ whois_data.updated_date }}</td></tr>
+          {% endif %}
+          {% if whois_data.name_servers %}
+            <tr><td>Name Servers</td><td>{{ whois_data.name_servers }}</td></tr>
+          {% endif %}
+          {% if whois_data.emails %}
+            <tr><td>Contact Emails</td><td>{{ whois_data.emails }}</td></tr>
+          {% endif %}
+        </table>
+        
+        <h3>Raw WHOIS Data</h3>
+        <pre>{{ whois_data.raw }}</pre>
+      {% endif %}
+    {% else %}
+      <p class="no-data">No WHOIS data available</p>
+    {% endif %}
+  </div>
 
-  <h2>Subdomains</h2>
-  <pre>{{ subs_text }}</pre>
+  <div class="section">
+    <h2>Network Information (RDAP)</h2>
+    {% if rdap_text %}
+      {% set rdap_data = rdap_text | from_json %}
+      {% if rdap_data.error %}
+        <p class="no-data">{{ rdap_data.error }}</p>
+      {% else %}
+        <table>
+          <tr><th width="25%">Field</th><th>Value</th></tr>
+          <tr><td>IP Address</td><td>{{ rdap_data.query }}</td></tr>
+          {% if rdap_data.network %}
+            <tr><td>Network Range</td><td>{{ rdap_data.network.start_address }} - {{ rdap_data.network.end_address }}</td></tr>
+            <tr><td>Network Name</td><td>{{ rdap_data.network.name }}</td></tr>
+            <tr><td>Handle</td><td>{{ rdap_data.network.handle }}</td></tr>
+            <tr><td>Country</td><td>{{ rdap_data.network.country }}</td></tr>
+          {% endif %}
+          {% if rdap_data.asn %}
+            <tr><td>ASN</td><td>{{ rdap_data.asn }}</td></tr>
+            <tr><td>ASN Description</td><td>{{ rdap_data.asn_description }}</td></tr>
+          {% endif %}
+        </table>
+      {% endif %}
+    {% else %}
+      <p class="no-data">No RDAP data available</p>
+    {% endif %}
+  </div>
+
+  <div class="section">
+    <h2>Subdomain Enumeration</h2>
+    {% if subs_text %}
+      {% set subs_data = subs_text | from_json %}
+      {% if subs_data | length > 0 %}
+        <table>
+          <tr><th>Subdomain</th><th>IP Address</th></tr>
+          {% for sub in subs_data %}
+            <tr>
+              <td>{{ sub.subdomain }}</td>
+              <td>{{ sub.address }}</td>
+            </tr>
+          {% endfor %}
+        </table>
+        <p><strong>Total subdomains found:</strong> {{ subs_data | length }}</p>
+      {% else %}
+        <p class="no-data">No subdomains found with the default wordlist</p>
+      {% endif %}
+    {% else %}
+      <p class="no-data">No subdomain data available</p>
+    {% endif %}
+  </div>
+
+  <div class="section">
+    <h2>Analysis Notes</h2>
+    <ul>
+      <li>This analysis was performed using automated tools and may not be comprehensive</li>
+      <li>Subdomain enumeration used a limited wordlist for performance reasons</li>
+      <li>Additional manual investigation may be required for complete coverage</li>
+      <li>All data should be verified through additional sources when used for critical decisions</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>Recommendations</h2>
+    <ul>
+      <li>Cross-reference findings with additional OSINT sources</li>
+      <li>Perform deeper subdomain enumeration with expanded wordlists if needed</li>
+      <li>Investigate any suspicious or unexpected findings further</li>
+      <li>Consider passive DNS analysis for historical data</li>
+      <li>Review SSL/TLS certificates for additional domain information</li>
+    </ul>
+  </div>
+
+  <hr style="margin-top: 30px;">
+  <p style="text-align: center; color: #6c757d; font-size: 10px;">
+    Generated by Portable OSINT Tool | Report Date: {{ current_time }}
+  </p>
 </body>
 </html>

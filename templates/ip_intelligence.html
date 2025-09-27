@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+  <div class="col-12">
+    <div class="card shadow-sm border-0 mb-4">
+      <div class="card-body">
+        <h5 class="card-title">
+          <i class="fas fa-network-wired text-success me-2"></i>IP Intelligence Analysis
+        </h5>
+        <p class="card-text text-muted">
+          Analyze IP addresses with WHOIS/RDAP lookups, geolocation data, and network information.
+        </p>
+        
+        <form method="POST" class="mt-3">
+          <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-search"></i></span>
+            <input type="text" name="ip" class="form-control" 
+                   placeholder="Enter IP address (e.g., 8.8.8.8)" 
+                   value="{{ request.form.ip if request.form.ip }}" required>
+            <button class="btn btn-success" type="submit">
+              <i class="fas fa-search me-1"></i>Analyze IP
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% if error %}
+  <div class="alert alert-warning border-0" role="alert">
+    <i class="fas fa-exclamation-triangle me-2"></i>{{ error }}
+  </div>
+{% endif %}
+
+{% if ip_data or geolocation %}
+<div class="row g-4">
+  <!-- IP WHOIS/RDAP Results -->
+  {% if ip_data %}
+  <div class="col-lg-6">
+    <div class="card shadow-sm border-0 h-100">
+      <div class="card-header bg-success text-white">
+        <h6 class="mb-0"><i class="fas fa-info-circle me-2"></i>IP WHOIS/RDAP Information</h6>
+      </div>
+      <div class="card-body">
+        {% if ip_data.error %}
+          <div class="alert alert-warning">{{ ip_data.error }}</div>
+        {% else %}
+          <table class="table table-sm">
+            <tbody>
+              <tr><th width="30%">IP Address</th><td><code>{{ ip_data.query }}</code></td></tr>
+              {% if ip_data.network %}
+                <tr><th>Network Range</th><td><code>{{ ip_data.network.start_address }} - {{ ip_data.network.end_address }}</code></td></tr>
+                <tr><th>Network Name</th><td>{{ ip_data.network.name }}</td></tr>
+                <tr><th>Handle</th><td>{{ ip_data.network.handle }}</td></tr>
+                <tr><th>Country</th><td>{{ ip_data.network.country }}</td></tr>
+              {% endif %}
+              {% if ip_data.asn %}
+                <tr><th>ASN</th><td>{{ ip_data.asn }}</td></tr>
+                <tr><th>ASN Description</th><td>{{ ip_data.asn_description }}</td></tr>
+              {% endif %}
+            </tbody>
+          </table>
+
+          <button class="btn btn-sm btn-outline-secondary" type="button" 
+                  data-bs-toggle="collapse" data-bs-target="#rawIpData">
+            <i class="fas fa-code me-1"></i>Show Raw JSON
+          </button>
+          <div id="rawIpData" class="collapse mt-2">
+            <pre class="bg-light p-2 rounded" style="white-space: pre-wrap; font-size: .8rem; max-height: 300px; overflow-y: auto;">{{ ip_data | tojson(indent=2) }}</pre>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Geolocation Results -->
+  {% if geolocation %}
+  <div class="col-lg-6">
+    <div class="card shadow-sm border-0 h-100">
+      <div class="card-header bg-primary text-white">
+        <h6 class="mb-0"><i class="fas fa-map-marker-alt me-2"></i>Geolocation Information</h6>
+      </div>
+      <div class="card-body">
+        {% if geolocation.status == 'success' %}
+          <table class="table table-sm">
+            <tbody>
+              <tr><th width="30%">Country</th><td>{{ geolocation.country }} ({{ geolocation.countryCode }})</td></tr>
+              <tr><th>Region</th><td>{{ geolocation.regionName }} ({{ geolocation.region }})</td></tr>
+              <tr><th>City</th><td>{{ geolocation.city }}</td></tr>
+              <tr><th>ZIP Code</th><td>{{ geolocation.zip }}</td></tr>
+              <tr><th>Timezone</th><td>{{ geolocation.timezone }}</td></tr>
+              <tr><th>ISP</th><td>{{ geolocation.isp }}</td></tr>
+              <tr><th>Organization</th><td>{{ geolocation.org }}</td></tr>
+              <tr><th>AS</th><td>{{ geolocation.as }}</td></tr>
+              {% if geolocation.lat and geolocation.lon %}
+                <tr><th>Coordinates</th><td>{{ geolocation.lat }}, {{ geolocation.lon }}</td></tr>
+              {% endif %}
+            </tbody>
+          </table>
+
+          {% if geolocation.lat and geolocation.lon %}
+          <div class="mt-3">
+            <h6>Location Map</h6>
+            <div class="alert alert-info">
+              <i class="fas fa-map me-2"></i>
+              <a href="https://www.google.com/maps?q={{ geolocation.lat }},{{ geolocation.lon }}" 
+                 target="_blank" class="alert-link">
+                View on Google Maps
+              </a>
+            </div>
+          </div>
+          {% endif %}
+        {% else %}
+          <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            Geolocation lookup failed: {{ geolocation.message if geolocation.message else 'Unknown error' }}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  {% endif %}
+</div>
+
+<!-- Additional Information -->
+<div class="row mt-4">
+  <div class="col-12">
+    <div class="card shadow-sm border-0">
+      <div class="card-header bg-info text-white">
+        <h6 class="mb-0"><i class="fas fa-shield-alt me-2"></i>Security & Threat Intelligence</h6>
+      </div>
+      <div class="card-body">
+        <div class="alert alert-info mb-0">
+          <i class="fas fa-info-circle me-2"></i>
+          <strong>Note:</strong> Threat intelligence features (AbuseIPDB, VirusTotal, etc.) are not implemented in this basic version. 
+          These would require API keys and are part of the enhanced AI capabilities.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<!-- Quick Actions -->
+<div class="row mt-4">
+  <div class="col-12">
+    <div class="card shadow-sm border-0">
+      <div class="card-body">
+        <h6><i class="fas fa-bolt me-2"></i>Quick Actions</h6>
+        <div class="d-flex flex-wrap gap-2">
+          <button class="btn btn-outline-primary btn-sm" onclick="fillExample('8.8.8.8')">
+            <i class="fas fa-fill me-1"></i>Google DNS
+          </button>
+          <button class="btn btn-outline-primary btn-sm" onclick="fillExample('1.1.1.1')">
+            <i class="fas fa-fill me-1"></i>Cloudflare DNS
+          </button>
+          <button class="btn btn-outline-primary btn-sm" onclick="fillExample('208.67.222.222')">
+            <i class="fas fa-fill me-1"></i>OpenDNS
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function fillExample(ip) {
+  document.querySelector('input[name="ip"]').value = ip;
+}
+</script>
+{% endblock %}
