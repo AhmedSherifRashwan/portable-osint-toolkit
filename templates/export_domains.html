@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Domain Report: {{ domain }}</title>
+  <style>
+    body { font-family: Arial, sans-serif; font-size: 12px; }
+    h1 { color: #0d6efd; }
+    h2 { margin-top: 1em; }
+    pre { white-space: pre-wrap; }
+    table { width: 100%; border-collapse: collapse; margin-top: 0.5em; }
+    th, td { border: 1px solid #ccc; padding: 4px; font-size: 11px; }
+  </style>
+</head>
+<body>
+  <h1>Domain Report: {{ domain }}</h1>
+
+  <h2>WHOIS</h2>
+  <pre>{{ whois_text }}</pre>
+
+  <h2>RDAP</h2>
+  <pre>{{ rdap_text }}</pre>
+
+  <h2>Subdomains</h2>
+  <pre>{{ subs_text }}</pre>
+</body>
+</html>

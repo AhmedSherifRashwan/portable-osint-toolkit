@@ -1,0 +1,84 @@
+:root {
+  --primary: #0d6efd;
+  --sidebar-bg: #1b1f3b;
+  --sidebar-hover: #2b3160;
+  --content-bg: #f5f6fa;
+  --text-light: #f0f0f0;
+}
+
+/* Base */
+body {
+  font-family: "Segoe UI", sans-serif;
+  margin: 0;
+  background-color: var(--content-bg);
+}
+
+/* Sidebar */
+.sidebar {
+  width: 240px;
+  background-color: var(--sidebar-bg);
+  color: var(--text-light);
+  height: 100vh;
+  overflow: hidden;
+  padding-right: 8px;
+}
+
+.sidebar h6 {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: #e0e6ff;   /* bright soft blue for contrast */
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+
+.sidebar .nav-link {
+  color: var(--text-light);
+  border-radius: 6px;
+  padding: 8px 12px;
+  transition: background-color 0.2s ease;
+}
+
+.sidebar .nav-link:hover {
+  background-color: var(--sidebar-hover);
+}
+
+.sidebar .nav-link.active {
+  background-color: var(--primary);
+  color: #fff;
+}
+
+/* Content */
+.content {
+  min-height: 100vh;
+  background-color: var(--content-bg);
+}
+
+/* Responsive: collapse sidebar */
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    left: -240px;
+    top: 0;
+    height: 100%;
+    transition: left 0.28s ease;
+    z-index: 1000;
+  }
+  .sidebar.active {
+    left: 0;
+  }
+  .content {
+    padding: 1rem;
+  }
+}
+
+/* Sidebar scroll, but hide scrollbar */
+.sidebar .overflow-auto {
+  overflow-y: auto;
+  scrollbar-width: none;      /* Firefox */
+  -ms-overflow-style: none;   /* IE/Edge */
+}
+.sidebar .overflow-auto::-webkit-scrollbar {
+  display: none;              /* Chrome, Safari */
+}
