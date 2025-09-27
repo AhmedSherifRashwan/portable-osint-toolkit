@@ -1,101 +1,207 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>Domains / Infrastructure</h1>
-
-<form method="POST" class="mb-3">
-  <div class="input-group">
-    <input type="text" name="domain" class="form-control" placeholder="Enter domain (example.com)" required>
-    <button class="btn btn-primary" type="submit">Lookup</button>
+<div class="row">
+  <div class="col-12">
+    <div class="card shadow-sm border-0 mb-4">
+      <div class="card-body">
+        <h5 class="card-title">
+          <i class="fas fa-globe text-primary me-2"></i>Domain & Infrastructure Analysis
+        </h5>
+        <p class="card-text text-muted">
+          Analyze domains with WHOIS lookups, RDAP queries, subdomain enumeration, and DNS record analysis.
+        </p>
+        
+        <form method="POST" class="mt-3">
+          <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-search"></i></span>
+            <input type="text" name="domain" class="form-control" 
+                   placeholder="Enter domain (example.com)" 
+                   value="{{ request.form.domain if request.form.domain }}" required>
+            <button class="btn btn-primary" type="submit">
+              <i class="fas fa-search me-1"></i>Analyze Domain
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
-</form>
+</div>
 
 {% if error %}
-  <div class="alert alert-warning">{{ error }}</div>
+  <div class="alert alert-warning border-0" role="alert">
+    <i class="fas fa-exclamation-triangle me-2"></i>{{ error }}
+  </div>
 {% endif %}
 
-{% if whois_text %}
-<div class="card p-3 mt-3">
-  <h5>WHOIS Result</h5>
-  <table class="table table-sm">
-    <tbody>
-      {% set w = whois_text %}
-      {% if w.registrar %}<tr><th>Registrar</th><td>{{ w.registrar }}</td></tr>{% endif %}
-      {% if w.creation_date %}<tr><th>Created</th><td>{{ w.creation_date }}</td></tr>{% endif %}
-      {% if w.expiration_date %}<tr><th>Expires</th><td>{{ w.expiration_date }}</td></tr>{% endif %}
-      {% if w.updated_date %}<tr><th>Updated</th><td>{{ w.updated_date }}</td></tr>{% endif %}
-      {% if w.name_servers %}<tr><th>Name Servers</th><td>{{ w.name_servers }}</td></tr>{% endif %}
-      {% if w.emails %}<tr><th>Email(s)</th><td>{{ w.emails }}</td></tr>{% endif %}
-    </tbody>
-  </table>
+{% if whois_data %}
+<div class="row g-4">
+  <!-- WHOIS Results -->
+  <div class="col-lg-6">
+    <div class="card shadow-sm border-0 h-100">
+      <div class="card-header bg-primary text-white">
+        <h6 class="mb-0"><i class="fas fa-info-circle me-2"></i>WHOIS Information</h6>
+      </div>
+      <div class="card-body">
+        {% if whois_data.error %}
+          <div class="alert alert-warning">{{ whois_data.error }}</div>
+        {% else %}
+          <table class="table table-sm">
+            <tbody>
+              {% if whois_data.registrar %}
+                <tr><th width="30%">Registrar</th><td>{{ whois_data.registrar }}</td></tr>
+              {% endif %}
+              {% if whois_data.creation_date %}
+                <tr><th>Created</th><td>{{ whois_data.creation_date }}</td></tr>
+              {% endif %}
+              {% if whois_data.expiration_date %}
+                <tr><th>Expires</th><td>{{ whois_data.expiration_date }}</td></tr>
+              {% endif %}
+              {% if whois_data.updated_date %}
+                <tr><th>Updated</th><td>{{ whois_data.updated_date }}</td></tr>
+              {% endif %}
+              {% if whois_data.name_servers %}
+                <tr><th>Name Servers</th><td>{{ whois_data.name_servers }}</td></tr>
+              {% endif %}
+              {% if whois_data.emails %}
+                <tr><th>Email(s)</th><td>{{ whois_data.emails }}</td></tr>
+              {% endif %}
+            </tbody>
+          </table>
 
-  <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#rawWhois">
-    Show Raw WHOIS
-  </button>
-  <div id="rawWhois" class="collapse mt-2">
-    <pre style="white-space: pre-wrap; font-size: .8rem;">{{ w }}</pre>
+          <button class="btn btn-sm btn-outline-secondary" type="button" 
+                  data-bs-toggle="collapse" data-bs-target="#rawWhois">
+            <i class="fas fa-code me-1"></i>Show Raw WHOIS
+          </button>
+          <div id="rawWhois" class="collapse mt-2">
+            <pre class="bg-light p-2 rounded" style="white-space: pre-wrap; font-size: .8rem; max-height: 300px; overflow-y: auto;">{{ whois_data.raw }}</pre>
+          </div>
+        {% endif %}
+      </div>
+    </div>
   </div>
 
-  <!-- Export button -->
-  <form action="{{ url_for('export_domains_pdf') }}" method="POST" target="_blank" class="mt-3">
-    <input type="hidden" name="domain" value="{{ request.form.domain }}">
-    <input type="hidden" name="whois_text" value="{{ whois_text }}">
-    <input type="hidden" name="rdap_text" value="{{ rdap_result|tojson }}">
-    <input type="hidden" name="subs_text" value="{{ subdomains_result|tojson }}">
-    <button class="btn btn-success btn-sm" type="submit">📄 Export as PDF</button>
-  </form>
+  <!-- RDAP Results -->
+  <div class="col-lg-6">
+    <div class="card shadow-sm border-0 h-100">
+      <div class="card-header bg-success text-white">
+        <h6 class="mb-0"><i class="fas fa-network-wired me-2"></i>RDAP Information</h6>
+      </div>
+      <div class="card-body">
+        {% if rdap_result.error %}
+          <div class="alert alert-warning">{{ rdap_result.error }}</div>
+        {% else %}
+          <table class="table table-sm table-striped">
+            <tbody>
+              {% if rdap_result.network %}
+                <tr><th width="30%">IP</th><td>{{ rdap_result.query }}</td></tr>
+                <tr><th>Network</th><td>{{ rdap_result.network.handle }} ({{ rdap_result.network.start_address }} - {{ rdap_result.network.end_address }})</td></tr>
+                <tr><th>Name</th><td>{{ rdap_result.network.name }}</td></tr>
+                <tr><th>Country</th><td>{{ rdap_result.network.country }}</td></tr>
+              {% endif %}
+              {% if rdap_result.asn %}
+                <tr><th>ASN</th><td>{{ rdap_result.asn }} ({{ rdap_result.asn_description }})</td></tr>
+              {% endif %}
+            </tbody>
+          </table>
+
+          <button class="btn btn-sm btn-outline-secondary" type="button" 
+                  data-bs-toggle="collapse" data-bs-target="#rawRdap">
+            <i class="fas fa-code me-1"></i>Show Raw JSON
+          </button>
+          <div id="rawRdap" class="collapse mt-2">
+            <pre class="bg-light p-2 rounded" style="white-space: pre-wrap; font-size: .8rem; max-height: 300px; overflow-y: auto;">{{ rdap_result | tojson(indent=2) }}</pre>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DNS Records -->
+{% if dns_records %}
+<div class="row mt-4">
+  <div class="col-12">
+    <div class="card shadow-sm border-0">
+      <div class="card-header bg-info text-white">
+        <h6 class="mb-0"><i class="fas fa-list me-2"></i>DNS Records</h6>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          {% for record_type, records in dns_records.items() %}
+            {% if records %}
+            <div class="col-md-6 col-lg-4 mb-3">
+              <h6 class="text-primary">{{ record_type }} Records</h6>
+              <ul class="list-unstyled">
+                {% for record in records %}
+                  <li class="small"><code>{{ record }}</code></li>
+                {% endfor %}
+              </ul>
+            </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 {% endif %}
 
-
-{% if rdap_result %}
-<div class="card p-3 mt-3">
-  <h5>RDAP Result</h5>
-  <table class="table table-sm table-striped">
-    <tbody>
-      {% if rdap_result.network %}
-        <tr><th>IP</th><td>{{ rdap_result.query }}</td></tr>
-        <tr><th>Network</th><td>{{ rdap_result.network.handle }} ({{ rdap_result.network.start_address }} - {{ rdap_result.network.end_address }})</td></tr>
-        <tr><th>Name</th><td>{{ rdap_result.network.name }}</td></tr>
-        <tr><th>Country</th><td>{{ rdap_result.network.country }}</td></tr>
-      {% endif %}
-      {% if rdap_result.asn %}
-        <tr><th>ASN</th><td>{{ rdap_result.asn }} ({{ rdap_result.asn_description }})</td></tr>
-      {% endif %}
-    </tbody>
-  </table>
-
-  <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#rawRdap">
-    Show Raw JSON
-  </button>
-  <div id="rawRdap" class="collapse mt-2">
-    <pre style="white-space: pre-wrap; font-size: .8rem;">{{ rdap_result | tojson(indent=2) }}</pre>
+<!-- Subdomains -->
+<div class="row mt-4">
+  <div class="col-12">
+    <div class="card shadow-sm border-0">
+      <div class="card-header bg-warning text-dark">
+        <h6 class="mb-0"><i class="fas fa-sitemap me-2"></i>Subdomain Enumeration</h6>
+      </div>
+      <div class="card-body">
+        {% if subdomains_result|length == 0 %}
+          <div class="alert alert-info mb-0">
+            <i class="fas fa-info-circle me-2"></i>No subdomains found with the default wordlist.
+          </div>
+        {% else %}
+          <div class="table-responsive">
+            <table class="table table-sm table-hover">
+              <thead class="table-light">
+                <tr>
+                  <th><i class="fas fa-globe me-1"></i>Subdomain</th>
+                  <th><i class="fas fa-map-marker-alt me-1"></i>Resolved IP(s)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for s in subdomains_result %}
+                  <tr>
+                    <td><code>{{ s.subdomain }}</code></td>
+                    <td><code>{{ s.address }}</code></td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% endif %}
+      </div>
+    </div>
   </div>
 </div>
-{% endif %}
 
-{% if subdomains_result is not none %}
-<div class="card p-3 mt-3">
-  <h5>Subdomain Enumeration</h5>
-  {% if subdomains_result|length == 0 %}
-    <p class="mb-0">No subdomains found with the default wordlist.</p>
-  {% else %}
-    <table class="table table-sm table-bordered">
-      <thead>
-        <tr>
-          <th>Subdomain</th>
-          <th>Resolved IP(s)</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for s in subdomains_result %}
-          <tr>
-            <td>{{ s.subdomain }}</td>
-            <td>{{ s.address }}</td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  {% endif %}
+<!-- Export Section -->
+<div class="row mt-4">
+  <div class="col-12">
+    <div class="card shadow-sm border-0">
+      <div class="card-body">
+        <h6><i class="fas fa-download me-2"></i>Export Results</h6>
+        <p class="text-muted small">Generate a comprehensive PDF report of all analysis results.</p>
+        <form action="{{ url_for('export_domains_pdf') }}" method="POST" target="_blank">
+          <input type="hidden" name="domain" value="{{ request.form.domain }}">
+          <input type="hidden" name="whois_text" value="{{ whois_data|tojson if whois_data else '' }}">
+          <input type="hidden" name="rdap_text" value="{{ rdap_result|tojson if rdap_result else '' }}">
+          <input type="hidden" name="subs_text" value="{{ subdomains_result|tojson if subdomains_result else '' }}">
+          <button class="btn btn-success btn-sm" type="submit">
+            <i class="fas fa-file-pdf me-1"></i>Export as PDF
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>
 {% endif %}
 {% endblock %}

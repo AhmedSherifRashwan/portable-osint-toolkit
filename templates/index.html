@@ -1,10 +1,135 @@
 {% extends "base.html" %}
 {% block content %}
-<h1 class="mb-4">Dashboard</h1>
-<div class="card shadow-sm p-3">
-  <h5 class="card-title">Welcome 👋</h5>
-  <p class="card-text">
-    This is your OSINT Dashboard. Use the left menu to pick modules.
-  </p>
+<div class="row">
+  <div class="col-12">
+    <div class="card shadow-sm border-0 mb-4">
+      <div class="card-body p-4">
+        <div class="d-flex align-items-center mb-3">
+          <i class="fas fa-tachometer-alt text-primary me-3" style="font-size: 2rem;"></i>
+          <div>
+            <h1 class="mb-1">Welcome to Portable OSINT Tool</h1>
+            <p class="text-muted mb-0">Your comprehensive open-source intelligence platform</p>
+          </div>
+        </div>
+        <p class="card-text">
+          This tool provides investigators, researchers, and analysts with powerful capabilities to gather, 
+          analyze, and visualize open-source intelligence. Use the navigation menu to access different modules 
+          and start your investigation.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-4">
+  <!-- Core Sources -->
+  <div class="col-md-6 col-lg-4">
+    <div class="card h-100 shadow-sm border-0 hover-card">
+      <div class="card-body">
+        <div class="d-flex align-items-center mb-3">
+          <i class="fas fa-globe text-primary me-2"></i>
+          <h5 class="card-title mb-0">Domain Intelligence</h5>
+        </div>
+        <p class="card-text">Perform WHOIS lookups, subdomain enumeration, and DNS analysis.</p>
+        <a href="{{ url_for('domains') }}" class="btn btn-primary btn-sm">
+          <i class="fas fa-arrow-right me-1"></i>Start Analysis
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6 col-lg-4">
+    <div class="card h-100 shadow-sm border-0 hover-card">
+      <div class="card-body">
+        <div class="d-flex align-items-center mb-3">
+          <i class="fas fa-network-wired text-success me-2"></i>
+          <h5 class="card-title mb-0">IP Intelligence</h5>
+        </div>
+        <p class="card-text">Analyze IP addresses with geolocation and threat intelligence.</p>
+        <a href="{{ url_for('ip_intelligence') }}" class="btn btn-success btn-sm">
+          <i class="fas fa-arrow-right me-1"></i>Analyze IP
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6 col-lg-4">
+    <div class="card h-100 shadow-sm border-0 hover-card">
+      <div class="card-body">
+        <div class="d-flex align-items-center mb-3">
+          <i class="fas fa-file-alt text-warning me-2"></i>
+          <h5 class="card-title mb-0">File Analysis</h5>
+        </div>
+        <p class="card-text">Extract metadata, calculate hashes, and analyze file contents.</p>
+        <a href="{{ url_for('file_analysis') }}" class="btn btn-warning btn-sm">
+          <i class="fas fa-arrow-right me-1"></i>Upload File
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Utilities -->
+  <div class="col-md-6 col-lg-4">
+    <div class="card h-100 shadow-sm border-0 hover-card">
+      <div class="card-body">
+        <div class="d-flex align-items-center mb-3">
+          <i class="fas fa-search text-info me-2"></i>
+          <h5 class="card-title mb-0">Regex Search</h5>
+        </div>
+        <p class="card-text">Extract emails, phone numbers, and crypto addresses from text.</p>
+        <a href="{{ url_for('regex_search') }}" class="btn btn-info btn-sm">
+          <i class="fas fa-arrow-right me-1"></i>Search Text
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6 col-lg-4">
+    <div class="card h-100 shadow-sm border-0 hover-card">
+      <div class="card-body">
+        <div class="d-flex align-items-center mb-3">
+          <i class="fas fa-bolt text-danger me-2"></i>
+          <h5 class="card-title mb-0">Quick Search</h5>
+        </div>
+        <p class="card-text">Access popular OSINT search engines and databases quickly.</p>
+        <a href="{{ url_for('quick_search') }}" class="btn btn-danger btn-sm">
+          <i class="fas fa-arrow-right me-1"></i>Quick Search
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6 col-lg-4">
+    <div class="card h-100 shadow-sm border-0 hover-card">
+      <div class="card-body">
+        <div class="d-flex align-items-center mb-3">
+          <i class="fas fa-folder text-secondary me-2"></i>
+          <h5 class="card-title mb-0">Case Management</h5>
+        </div>
+        <p class="card-text">Organize your investigations and manage research projects.</p>
+        <a href="{{ url_for('case_management') }}" class="btn btn-secondary btn-sm">
+          <i class="fas fa-arrow-right me-1"></i>Manage Cases
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row mt-5">
+  <div class="col-12">
+    <div class="alert alert-info border-0" role="alert">
+      <div class="d-flex align-items-center">
+        <i class="fas fa-info-circle me-2"></i>
+        <div>
+          <h6 class="alert-heading mb-1">Getting Started</h6>
+          <p class="mb-0">
+            This is a portable OSINT tool designed for investigators and researchers. 
+            Features marked as disabled are placeholders for future AI-enhanced capabilities. 
+            Start with domain analysis or IP intelligence to begin your investigation.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}

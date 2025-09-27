@@ -1,5 +1,228 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>About</h1>
-<p>This is a basic OSINT dashboard UI prototype.</p>
+<div class="row">
+  <div class="col-12">
+    <div class="card shadow-sm border-0 mb-4">
+      <div class="card-body">
+        <div class="d-flex align-items-center mb-3">
+          <i class="fas fa-info-circle text-primary me-3" style="font-size: 2rem;"></i>
+          <div>
+            <h1 class="mb-1">About Portable OSINT Tool</h1>
+            <p class="text-muted mb-0">Open-source intelligence platform for investigators and researchers</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-4">
+  <!-- Overview -->
+  <div class="col-lg-8">
+    <div class="card shadow-sm border-0 h-100">
+      <div class="card-header bg-primary text-white">
+        <h6 class="mb-0"><i class="fas fa-eye me-2"></i>Overview</h6>
+      </div>
+      <div class="card-body">
+        <p>
+          The <strong>Portable OSINT Tool</strong> is an all-in-one, investigator-focused platform designed to gather, 
+          analyze, and visualize open-source intelligence (OSINT). Built with portability, security, and efficiency in mind, 
+          it enables researchers, analysts, and investigators to work effectively both online and offline.
+        </p>
+        
+        <p>
+          This implementation focuses on the core static features without AI enhancements, providing a solid foundation 
+          for OSINT investigations with domain analysis, IP intelligence, file metadata extraction, and pattern recognition capabilities.
+        </p>
+
+        <h6 class="mt-4 mb-3">Key Features Implemented</h6>
+        <div class="row">
+          <div class="col-md-6">
+            <ul class="list-unstyled">
+              <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Domain & Infrastructure Analysis</li>
+              <li class="mb-2"><i class="fas fa-check text-success me-2"></i>IP Intelligence & Geolocation</li>
+              <li class="mb-2"><i class="fas fa-check text-success me-2"></i>File Metadata Extraction</li>
+              <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Regex Pattern Search</li>
+            </ul>
+          </div>
+          <div class="col-md-6">
+            <ul class="list-unstyled">
+              <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Quick Search Hub</li>
+              <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Case Management System</li>
+              <li class="mb-2"><i class="fas fa-check text-success me-2"></i>PDF Report Export</li>
+              <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Responsive Web Interface</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Technical Details -->
+  <div class="col-lg-4">
+    <div class="card shadow-sm border-0 h-100">
+      <div class="card-header bg-success text-white">
+        <h6 class="mb-0"><i class="fas fa-cog me-2"></i>Technical Stack</h6>
+      </div>
+      <div class="card-body">
+        <table class="table table-sm">
+          <tbody>
+            <tr><th>Backend</th><td>Flask (Python)</td></tr>
+            <tr><th>Frontend</th><td>Bootstrap 5</td></tr>
+            <tr><th>Icons</th><td>Font Awesome</td></tr>
+            <tr><th>WHOIS</th><td>python-whois</td></tr>
+            <tr><th>IP Lookup</th><td>ipwhois</td></tr>
+            <tr><th>DNS</th><td>dnspython</td></tr>
+            <tr><th>PDF Export</th><td>xhtml2pdf</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Features Status -->
+<div class="row mt-4">
+  <div class="col-12">
+    <div class="card shadow-sm border-0">
+      <div class="card-header bg-info text-white">
+        <h6 class="mb-0"><i class="fas fa-list-check me-2"></i>Feature Implementation Status</h6>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <!-- Implemented Features -->
+          <div class="col-md-6">
+            <h6 class="text-success">✅ Implemented Features</h6>
+            <ul class="list-unstyled">
+              <li class="mb-2">
+                <strong>Domain Analysis:</strong>
+                <ul class="small text-muted mt-1">
+                  <li>WHOIS & RDAP queries</li>
+                  <li>Subdomain enumeration</li>
+                  <li>DNS record analysis</li>
+                </ul>
+              </li>
+              <li class="mb-2">
+                <strong>IP Intelligence:</strong>
+                <ul class="small text-muted mt-1">
+                  <li>IP WHOIS/RDAP lookups</li>
+                  <li>Geolocation data</li>
+                  <li>Network information</li>
+                </ul>
+              </li>
+              <li class="mb-2">
+                <strong>File Analysis:</strong>
+                <ul class="small text-muted mt-1">
+                  <li>Hash calculation (MD5, SHA1, SHA256)</li>
+                  <li>Content pattern extraction</li>
+                  <li>Basic metadata extraction</li>
+                </ul>
+              </li>
+              <li class="mb-2">
+                <strong>Utilities:</strong>
+                <ul class="small text-muted mt-1">
+                  <li>Regex search for emails, phones, crypto addresses</li>
+                  <li>Quick search hub with OSINT resources</li>
+                  <li>Case management system</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Placeholder Features -->
+          <div class="col-md-6">
+            <h6 class="text-warning">⏳ Placeholder Features (Future AI Enhancement)</h6>
+            <ul class="list-unstyled">
+              <li class="mb-2">
+                <strong>AI Capabilities:</strong>
+                <ul class="small text-muted mt-1">
+                  <li>Data validation & cross-corroboration</li>
+                  <li>Entity extraction & graphing</li>
+                  <li>Lead generation</li>
+                  <li>Clustering & similarity detection</li>
+                  <li>AI-assisted reporting</li>
+                </ul>
+              </li>
+              <li class="mb-2">
+                <strong>Advanced Sources:</strong>
+                <ul class="small text-muted mt-1">
+                  <li>Vehicle/Registry data (VIN, license plates)</li>
+                  <li>Social media intelligence</li>
+                  <li>Dark web monitoring</li>
+                  <li>Threat intelligence feeds</li>
+                </ul>
+              </li>
+              <li class="mb-2">
+                <strong>Visualization:</strong>
+                <ul class="small text-muted mt-1">
+                  <li>Interactive graph view</li>
+                  <li>Timeline visualization</li>
+                  <li>Geospatial mapping</li>
+                </ul>
+              </li>
+              <li class="mb-2">
+                <strong>Security Features:</strong>
+                <ul class="small text-muted mt-1">
+                  <li>Encrypted database</li>
+                  <li>API key vault</li>
+                  <li>Audit logging</li>
+                  <li>Offline mode</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Usage Guidelines -->
+<div class="row mt-4">
+  <div class="col-12">
+    <div class="card shadow-sm border-0">
+      <div class="card-header bg-warning text-dark">
+        <h6 class="mb-0"><i class="fas fa-exclamation-triangle me-2"></i>Usage Guidelines & Disclaimers</h6>
+      </div>
+      <div class="card-body">
+        <div class="alert alert-warning">
+          <h6 class="alert-heading">⚠️ Important Legal and Ethical Considerations</h6>
+          <ul class="mb-0">
+            <li><strong>Legal Compliance:</strong> Ensure all investigations comply with local laws and regulations</li>
+            <li><strong>Privacy Respect:</strong> Respect privacy rights and data protection laws (GDPR, CCPA, etc.)</li>
+            <li><strong>Authorized Use:</strong> Only investigate domains, IPs, and data you have permission to analyze</li>
+            <li><strong>Rate Limiting:</strong> Be respectful of external services and avoid excessive requests</li>
+            <li><strong>Data Handling:</strong> Securely handle and dispose of sensitive information</li>
+          </ul>
+        </div>
+
+        <div class="alert alert-info">
+          <h6 class="alert-heading">🔧 Technical Limitations</h6>
+          <ul class="mb-0">
+            <li>This is a basic implementation without advanced AI features</li>
+            <li>Some external services may require API keys for full functionality</li>
+            <li>Subdomain enumeration uses a limited wordlist for performance</li>
+            <li>File analysis is limited to text-based content extraction</li>
+            <li>Case management data is stored locally in browser storage</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Contact & Support -->
+<div class="row mt-4">
+  <div class="col-12">
+    <div class="card shadow-sm border-0">
+      <div class="card-body text-center">
+        <h6><i class="fas fa-heart text-danger me-2"></i>Built for the OSINT Community</h6>
+        <p class="text-muted mb-0">
+          This tool is designed to support investigators, researchers, and analysts in their open-source intelligence work. 
+          Use responsibly and ethically.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

@@ -1,0 +1,312 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+  <div class="col-12">
+    <div class="card shadow-sm border-0 mb-4">
+      <div class="card-body">
+        <h5 class="card-title">
+          <i class="fas fa-bolt text-danger me-2"></i>Quick Search Hub
+        </h5>
+        <p class="card-text text-muted">
+          Quick access to popular OSINT search engines, databases, and investigative resources.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-4">
+  <!-- Search Engines & General -->
+  <div class="col-lg-6">
+    <div class="card shadow-sm border-0 h-100">
+      <div class="card-header bg-primary text-white">
+        <h6 class="mb-0"><i class="fas fa-search me-2"></i>Search Engines & General</h6>
+      </div>
+      <div class="card-body">
+        <div class="d-grid gap-2">
+          <a href="https://www.google.com" target="_blank" class="btn btn-outline-primary btn-sm">
+            <i class="fab fa-google me-2"></i>Google Search
+          </a>
+          <a href="https://duckduckgo.com" target="_blank" class="btn btn-outline-secondary btn-sm">
+            <i class="fas fa-search me-2"></i>DuckDuckGo
+          </a>
+          <a href="https://yandex.com" target="_blank" class="btn btn-outline-danger btn-sm">
+            <i class="fas fa-search me-2"></i>Yandex
+          </a>
+          <a href="https://www.bing.com" target="_blank" class="btn btn-outline-info btn-sm">
+            <i class="fab fa-microsoft me-2"></i>Bing
+          </a>
+          <a href="https://archive.org" target="_blank" class="btn btn-outline-warning btn-sm">
+            <i class="fas fa-archive me-2"></i>Internet Archive
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Technical & Infrastructure -->
+  <div class="col-lg-6">
+    <div class="card shadow-sm border-0 h-100">
+      <div class="card-header bg-success text-white">
+        <h6 class="mb-0"><i class="fas fa-server me-2"></i>Technical & Infrastructure</h6>
+      </div>
+      <div class="card-body">
+        <div class="d-grid gap-2">
+          <a href="https://shodan.io" target="_blank" class="btn btn-outline-dark btn-sm">
+            <i class="fas fa-network-wired me-2"></i>Shodan
+          </a>
+          <a href="https://censys.io" target="_blank" class="btn btn-outline-primary btn-sm">
+            <i class="fas fa-search me-2"></i>Censys
+          </a>
+          <a href="https://www.virustotal.com" target="_blank" class="btn btn-outline-danger btn-sm">
+            <i class="fas fa-shield-alt me-2"></i>VirusTotal
+          </a>
+          <a href="https://urlvoid.com" target="_blank" class="btn btn-outline-warning btn-sm">
+            <i class="fas fa-link me-2"></i>URLVoid
+          </a>
+          <a href="https://builtwith.com" target="_blank" class="btn btn-outline-info btn-sm">
+            <i class="fas fa-code me-2"></i>BuiltWith
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Social Media & People -->
+  <div class="col-lg-6">
+    <div class="card shadow-sm border-0 h-100">
+      <div class="card-header bg-info text-white">
+        <h6 class="mb-0"><i class="fas fa-users me-2"></i>Social Media & People</h6>
+      </div>
+      <div class="card-body">
+        <div class="d-grid gap-2">
+          <a href="https://pipl.com" target="_blank" class="btn btn-outline-primary btn-sm">
+            <i class="fas fa-user me-2"></i>Pipl
+          </a>
+          <a href="https://www.spokeo.com" target="_blank" class="btn btn-outline-secondary btn-sm">
+            <i class="fas fa-address-book me-2"></i>Spokeo
+          </a>
+          <a href="https://namechk.com" target="_blank" class="btn btn-outline-success btn-sm">
+            <i class="fas fa-at me-2"></i>NameChk
+          </a>
+          <a href="https://knowem.com" target="_blank" class="btn btn-outline-warning btn-sm">
+            <i class="fas fa-user-check me-2"></i>KnowEm
+          </a>
+          <a href="https://www.facebook.com" target="_blank" class="btn btn-outline-primary btn-sm">
+            <i class="fab fa-facebook me-2"></i>Facebook
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Domain & DNS -->
+  <div class="col-lg-6">
+    <div class="card shadow-sm border-0 h-100">
+      <div class="card-header bg-warning text-dark">
+        <h6 class="mb-0"><i class="fas fa-globe me-2"></i>Domain & DNS</h6>
+      </div>
+      <div class="card-body">
+        <div class="d-grid gap-2">
+          <a href="https://whois.net" target="_blank" class="btn btn-outline-primary btn-sm">
+            <i class="fas fa-info-circle me-2"></i>WHOIS.net
+          </a>
+          <a href="https://www.robtex.com" target="_blank" class="btn btn-outline-secondary btn-sm">
+            <i class="fas fa-sitemap me-2"></i>Robtex
+          </a>
+          <a href="https://dnsdumpster.com" target="_blank" class="btn btn-outline-success btn-sm">
+            <i class="fas fa-database me-2"></i>DNS Dumpster
+          </a>
+          <a href="https://securitytrails.com" target="_blank" class="btn btn-outline-danger btn-sm">
+            <i class="fas fa-route me-2"></i>SecurityTrails
+          </a>
+          <a href="https://crt.sh" target="_blank" class="btn btn-outline-info btn-sm">
+            <i class="fas fa-certificate me-2"></i>crt.sh
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Email & Communication -->
+  <div class="col-lg-6">
+    <div class="card shadow-sm border-0 h-100">
+      <div class="card-header bg-secondary text-white">
+        <h6 class="mb-0"><i class="fas fa-envelope me-2"></i>Email & Communication</h6>
+      </div>
+      <div class="card-body">
+        <div class="d-grid gap-2">
+          <a href="https://hunter.io" target="_blank" class="btn btn-outline-primary btn-sm">
+            <i class="fas fa-search me-2"></i>Hunter.io
+          </a>
+          <a href="https://haveibeenpwned.com" target="_blank" class="btn btn-outline-danger btn-sm">
+            <i class="fas fa-exclamation-triangle me-2"></i>Have I Been Pwned
+          </a>
+          <a href="https://www.emailrep.io" target="_blank" class="btn btn-outline-info btn-sm">
+            <i class="fas fa-envelope-open me-2"></i>EmailRep
+          </a>
+          <a href="https://tools.verifyemailaddress.io" target="_blank" class="btn btn-outline-success btn-sm">
+            <i class="fas fa-check-circle me-2"></i>Verify Email
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cryptocurrency -->
+  <div class="col-lg-6">
+    <div class="card shadow-sm border-0 h-100">
+      <div class="card-header bg-warning text-dark">
+        <h6 class="mb-0"><i class="fas fa-coins me-2"></i>Cryptocurrency</h6>
+      </div>
+      <div class="card-body">
+        <div class="d-grid gap-2">
+          <a href="https://blockchair.com" target="_blank" class="btn btn-outline-primary btn-sm">
+            <i class="fas fa-cube me-2"></i>Blockchair
+          </a>
+          <a href="https://etherscan.io" target="_blank" class="btn btn-outline-info btn-sm">
+            <i class="fab fa-ethereum me-2"></i>Etherscan
+          </a>
+          <a href="https://www.blockchain.com/explorer" target="_blank" class="btn btn-outline-warning btn-sm">
+            <i class="fab fa-bitcoin me-2"></i>Blockchain.com
+          </a>
+          <a href="https://oxt.me" target="_blank" class="btn btn-outline-secondary btn-sm">
+            <i class="fas fa-project-diagram me-2"></i>OXT
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Google Dorking -->
+<div class="row mt-4">
+  <div class="col-12">
+    <div class="card shadow-sm border-0">
+      <div class="card-header bg-dark text-white">
+        <h6 class="mb-0"><i class="fab fa-google me-2"></i>Google Dorking Quick Access</h6>
+      </div>
+      <div class="card-body">
+        <p class="text-muted">Common Google search operators for OSINT investigations:</p>
+        
+        <div class="row">
+          <div class="col-md-6">
+            <h6>Site-specific Searches</h6>
+            <div class="mb-3">
+              <input type="text" id="siteSearch" class="form-control form-control-sm" placeholder="Enter domain">
+              <div class="mt-2">
+                <button class="btn btn-outline-primary btn-sm me-1" onclick="googleDork('site:' + document.getElementById('siteSearch').value)">
+                  site: search
+                </button>
+                <button class="btn btn-outline-secondary btn-sm" onclick="googleDork('inurl:' + document.getElementById('siteSearch').value)">
+                  inurl: search
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-md-6">
+            <h6>File Type Searches</h6>
+            <div class="mb-3">
+              <input type="text" id="fileSearch" class="form-control form-control-sm" placeholder="Enter search term">
+              <div class="mt-2">
+                <button class="btn btn-outline-info btn-sm me-1" onclick="googleDork(document.getElementById('fileSearch').value + ' filetype:pdf')">
+                  PDF files
+                </button>
+                <button class="btn btn-outline-warning btn-sm" onclick="googleDork(document.getElementById('fileSearch').value + ' filetype:xlsx')">
+                  Excel files
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="row">
+          <div class="col-12">
+            <h6>Quick Dorks</h6>
+            <div class="d-flex flex-wrap gap-2">
+              <button class="btn btn-outline-dark btn-sm" onclick="googleDork('intitle:index.of')">
+                Directory Listings
+              </button>
+              <button class="btn btn-outline-dark btn-sm" onclick="googleDork('inurl:admin')">
+                Admin Pages
+              </button>
+              <button class="btn btn-outline-dark btn-sm" onclick="googleDork('filetype:log')">
+                Log Files
+              </button>
+              <button class="btn btn-outline-dark btn-sm" onclick="googleDork('intext:password')">
+                Password References
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Custom Search -->
+<div class="row mt-4">
+  <div class="col-12">
+    <div class="card shadow-sm border-0">
+      <div class="card-body">
+        <h6><i class="fas fa-search me-2"></i>Custom Search</h6>
+        <div class="input-group">
+          <input type="text" id="customSearch" class="form-control" placeholder="Enter your search query">
+          <select id="searchEngine" class="form-select" style="max-width: 150px;">
+            <option value="google">Google</option>
+            <option value="duckduckgo">DuckDuckGo</option>
+            <option value="bing">Bing</option>
+            <option value="yandex">Yandex</option>
+          </select>
+          <button class="btn btn-primary" onclick="customSearch()">
+            <i class="fas fa-search me-1"></i>Search
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function googleDork(query) {
+  const url = 'https://www.google.com/search?q=' + encodeURIComponent(query);
+  window.open(url, '_blank');
+}
+
+function customSearch() {
+  const query = document.getElementById('customSearch').value;
+  const engine = document.getElementById('searchEngine').value;
+  
+  if (!query.trim()) {
+    alert('Please enter a search query');
+    return;
+  }
+  
+  let url;
+  switch(engine) {
+    case 'google':
+      url = 'https://www.google.com/search?q=' + encodeURIComponent(query);
+      break;
+    case 'duckduckgo':
+      url = 'https://duckduckgo.com/?q=' + encodeURIComponent(query);
+      break;
+    case 'bing':
+      url = 'https://www.bing.com/search?q=' + encodeURIComponent(query);
+      break;
+    case 'yandex':
+      url = 'https://yandex.com/search/?text=' + encodeURIComponent(query);
+      break;
+  }
+  
+  window.open(url, '_blank');
+}
+
+// Allow Enter key to trigger custom search
+document.getElementById('customSearch').addEventListener('keypress', function(e) {
+  if (e.key === 'Enter') {
+    customSearch();
+  }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,424 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+  <div class="col-12">
+    <div class="card shadow-sm border-0 mb-4">
+      <div class="card-body">
+        <h5 class="card-title">
+          <i class="fas fa-folder text-secondary me-2"></i>Case Management System
+        </h5>
+        <p class="card-text text-muted">
+          Organize your investigations, manage research projects, and track findings across multiple cases.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Case Creation -->
+<div class="row mb-4">
+  <div class="col-12">
+    <div class="card shadow-sm border-0">
+      <div class="card-header bg-primary text-white">
+        <h6 class="mb-0"><i class="fas fa-plus me-2"></i>Create New Case</h6>
+      </div>
+      <div class="card-body">
+        <form id="newCaseForm">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="caseName" class="form-label">Case Name</label>
+              <input type="text" id="caseName" class="form-control" placeholder="Enter case name" required>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="caseType" class="form-label">Case Type</label>
+              <select id="caseType" class="form-select">
+                <option value="investigation">Investigation</option>
+                <option value="research">Research</option>
+                <option value="threat-intel">Threat Intelligence</option>
+                <option value="compliance">Compliance</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="caseDescription" class="form-label">Description</label>
+            <textarea id="caseDescription" class="form-control" rows="3" placeholder="Brief description of the case"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-plus me-1"></i>Create Case
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Active Cases -->
+<div class="row">
+  <div class="col-12">
+    <div class="card shadow-sm border-0">
+      <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+        <h6 class="mb-0"><i class="fas fa-folder-open me-2"></i>Active Cases</h6>
+        <span class="badge bg-light text-dark" id="caseCount">0</span>
+      </div>
+      <div class="card-body">
+        <div id="casesList">
+          <!-- Cases will be populated here -->
+          <div class="alert alert-info">
+            <i class="fas fa-info-circle me-2"></i>
+            No cases created yet. Create your first case above to get started.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Case Template -->
+<template id="caseTemplate">
+  <div class="card mb-3 case-card">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-start">
+        <div class="flex-grow-1">
+          <h6 class="card-title mb-1">
+            <i class="fas fa-folder me-2"></i>
+            <span class="case-name"></span>
+            <span class="badge case-type-badge ms-2"></span>
+          </h6>
+          <p class="card-text text-muted small case-description"></p>
+          <div class="d-flex align-items-center text-muted small">
+            <i class="fas fa-calendar me-1"></i>
+            <span class="case-created"></span>
+            <span class="mx-2">•</span>
+            <i class="fas fa-clock me-1"></i>
+            <span class="case-updated"></span>
+          </div>
+        </div>
+        <div class="dropdown">
+          <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+            <i class="fas fa-ellipsis-v"></i>
+          </button>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#" onclick="openCase(this)">
+              <i class="fas fa-folder-open me-2"></i>Open Case
+            </a></li>
+            <li><a class="dropdown-item" href="#" onclick="editCase(this)">
+              <i class="fas fa-edit me-2"></i>Edit
+            </a></li>
+            <li><a class="dropdown-item" href="#" onclick="exportCase(this)">
+              <i class="fas fa-download me-2"></i>Export
+            </a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item text-danger" href="#" onclick="deleteCase(this)">
+              <i class="fas fa-trash me-2"></i>Delete
+            </a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <!-- Case Details (collapsed by default) -->
+      <div class="collapse case-details mt-3">
+        <hr>
+        <div class="row">
+          <div class="col-md-6">
+            <h6 class="small text-muted">FINDINGS & NOTES</h6>
+            <div class="case-findings">
+              <p class="small text-muted">No findings recorded yet.</p>
+            </div>
+            <button class="btn btn-sm btn-outline-primary" onclick="addFinding(this)">
+              <i class="fas fa-plus me-1"></i>Add Finding
+            </button>
+          </div>
+          <div class="col-md-6">
+            <h6 class="small text-muted">RELATED ENTITIES</h6>
+            <div class="case-entities">
+              <p class="small text-muted">No entities tracked yet.</p>
+            </div>
+            <button class="btn btn-sm btn-outline-success" onclick="addEntity(this)">
+              <i class="fas fa-plus me-1"></i>Add Entity
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<!-- Case Modal -->
+<div class="modal fade" id="caseModal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Case Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div id="modalContent">
+          <!-- Content will be populated dynamically -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="saveCase()">Save Changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Case management functionality
+let cases = JSON.parse(localStorage.getItem('osint-cases') || '[]');
+
+// Initialize page
+document.addEventListener('DOMContentLoaded', function() {
+  renderCases();
+  updateCaseCount();
+});
+
+// Create new case
+document.getElementById('newCaseForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  
+  const newCase = {
+    id: Date.now().toString(),
+    name: document.getElementById('caseName').value,
+    type: document.getElementById('caseType').value,
+    description: document.getElementById('caseDescription').value,
+    created: new Date().toISOString(),
+    updated: new Date().toISOString(),
+    findings: [],
+    entities: []
+  };
+  
+  cases.push(newCase);
+  saveCases();
+  renderCases();
+  updateCaseCount();
+  
+  // Reset form
+  this.reset();
+  
+  // Show success message
+  showAlert('Case created successfully!', 'success');
+});
+
+function renderCases() {
+  const casesList = document.getElementById('casesList');
+  const template = document.getElementById('caseTemplate');
+  
+  if (cases.length === 0) {
+    casesList.innerHTML = `
+      <div class="alert alert-info">
+        <i class="fas fa-info-circle me-2"></i>
+        No cases created yet. Create your first case above to get started.
+      </div>
+    `;
+    return;
+  }
+  
+  casesList.innerHTML = '';
+  
+  cases.forEach(caseData => {
+    const caseElement = template.content.cloneNode(true);
+    
+    caseElement.querySelector('.case-name').textContent = caseData.name;
+    caseElement.querySelector('.case-description').textContent = caseData.description || 'No description';
+    caseElement.querySelector('.case-created').textContent = 'Created: ' + new Date(caseData.created).toLocaleDateString();
+    caseElement.querySelector('.case-updated').textContent = 'Updated: ' + new Date(caseData.updated).toLocaleDateString();
+    
+    const typeBadge = caseElement.querySelector('.case-type-badge');
+    typeBadge.textContent = caseData.type;
+    typeBadge.className = `badge case-type-badge ms-2 bg-${getTypeColor(caseData.type)}`;
+    
+    // Set case ID for reference
+    caseElement.querySelector('.case-card').dataset.caseId = caseData.id;
+    
+    casesList.appendChild(caseElement);
+  });
+}
+
+function getTypeColor(type) {
+  const colors = {
+    'investigation': 'danger',
+    'research': 'primary',
+    'threat-intel': 'warning',
+    'compliance': 'success',
+    'other': 'secondary'
+  };
+  return colors[type] || 'secondary';
+}
+
+function updateCaseCount() {
+  document.getElementById('caseCount').textContent = cases.length;
+}
+
+function saveCases() {
+  localStorage.setItem('osint-cases', JSON.stringify(cases));
+}
+
+function openCase(element) {
+  const caseCard = element.closest('.case-card');
+  const caseId = caseCard.dataset.caseId;
+  const caseData = cases.find(c => c.id === caseId);
+  
+  if (caseData) {
+    // Toggle case details
+    const details = caseCard.querySelector('.case-details');
+    if (details.classList.contains('show')) {
+      details.classList.remove('show');
+    } else {
+      // Close all other open cases
+      document.querySelectorAll('.case-details.show').forEach(d => d.classList.remove('show'));
+      details.classList.add('show');
+    }
+  }
+}
+
+function editCase(element) {
+  const caseCard = element.closest('.case-card');
+  const caseId = caseCard.dataset.caseId;
+  const caseData = cases.find(c => c.id === caseId);
+  
+  if (caseData) {
+    // Populate modal with case data for editing
+    const modalContent = document.getElementById('modalContent');
+    modalContent.innerHTML = `
+      <form id="editCaseForm">
+        <input type="hidden" id="editCaseId" value="${caseData.id}">
+        <div class="mb-3">
+          <label for="editCaseName" class="form-label">Case Name</label>
+          <input type="text" id="editCaseName" class="form-control" value="${caseData.name}" required>
+        </div>
+        <div class="mb-3">
+          <label for="editCaseType" class="form-label">Case Type</label>
+          <select id="editCaseType" class="form-select">
+            <option value="investigation" ${caseData.type === 'investigation' ? 'selected' : ''}>Investigation</option>
+            <option value="research" ${caseData.type === 'research' ? 'selected' : ''}>Research</option>
+            <option value="threat-intel" ${caseData.type === 'threat-intel' ? 'selected' : ''}>Threat Intelligence</option>
+            <option value="compliance" ${caseData.type === 'compliance' ? 'selected' : ''}>Compliance</option>
+            <option value="other" ${caseData.type === 'other' ? 'selected' : ''}>Other</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="editCaseDescription" class="form-label">Description</label>
+          <textarea id="editCaseDescription" class="form-control" rows="3">${caseData.description || ''}</textarea>
+        </div>
+      </form>
+    `;
+    
+    new bootstrap.Modal(document.getElementById('caseModal')).show();
+  }
+}
+
+function saveCase() {
+  const caseId = document.getElementById('editCaseId').value;
+  const caseIndex = cases.findIndex(c => c.id === caseId);
+  
+  if (caseIndex !== -1) {
+    cases[caseIndex].name = document.getElementById('editCaseName').value;
+    cases[caseIndex].type = document.getElementById('editCaseType').value;
+    cases[caseIndex].description = document.getElementById('editCaseDescription').value;
+    cases[caseIndex].updated = new Date().toISOString();
+    
+    saveCases();
+    renderCases();
+    
+    bootstrap.Modal.getInstance(document.getElementById('caseModal')).hide();
+    showAlert('Case updated successfully!', 'success');
+  }
+}
+
+function exportCase(element) {
+  const caseCard = element.closest('.case-card');
+  const caseId = caseCard.dataset.caseId;
+  const caseData = cases.find(c => c.id === caseId);
+  
+  if (caseData) {
+    const exportData = JSON.stringify(caseData, null, 2);
+    const blob = new Blob([exportData], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `case-${caseData.name.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.json`;
+    a.click();
+    
+    URL.revokeObjectURL(url);
+    showAlert('Case exported successfully!', 'info');
+  }
+}
+
+function deleteCase(element) {
+  const caseCard = element.closest('.case-card');
+  const caseId = caseCard.dataset.caseId;
+  const caseData = cases.find(c => c.id === caseId);
+  
+  if (caseData && confirm(`Are you sure you want to delete the case "${caseData.name}"?`)) {
+    cases = cases.filter(c => c.id !== caseId);
+    saveCases();
+    renderCases();
+    updateCaseCount();
+    showAlert('Case deleted successfully!', 'warning');
+  }
+}
+
+function addFinding(element) {
+  const finding = prompt('Enter finding or note:');
+  if (finding) {
+    const caseCard = element.closest('.case-card');
+    const caseId = caseCard.dataset.caseId;
+    const caseIndex = cases.findIndex(c => c.id === caseId);
+    
+    if (caseIndex !== -1) {
+      cases[caseIndex].findings.push({
+        id: Date.now().toString(),
+        text: finding,
+        timestamp: new Date().toISOString()
+      });
+      cases[caseIndex].updated = new Date().toISOString();
+      saveCases();
+      showAlert('Finding added successfully!', 'success');
+    }
+  }
+}
+
+function addEntity(element) {
+  const entity = prompt('Enter entity (domain, IP, email, etc.):');
+  if (entity) {
+    const caseCard = element.closest('.case-card');
+    const caseId = caseCard.dataset.caseId;
+    const caseIndex = cases.findIndex(c => c.id === caseId);
+    
+    if (caseIndex !== -1) {
+      cases[caseIndex].entities.push({
+        id: Date.now().toString(),
+        value: entity,
+        type: 'unknown',
+        timestamp: new Date().toISOString()
+      });
+      cases[caseIndex].updated = new Date().toISOString();
+      saveCases();
+      showAlert('Entity added successfully!', 'success');
+    }
+  }
+}
+
+function showAlert(message, type) {
+  const alertDiv = document.createElement('div');
+  alertDiv.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
+  alertDiv.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+  alertDiv.innerHTML = `
+    ${message}
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  `;
+  
+  document.body.appendChild(alertDiv);
+  
+  setTimeout(() => {
+    if (alertDiv.parentNode) {
+      alertDiv.parentNode.removeChild(alertDiv);
+    }
+  }, 5000);
+}
+</script>
+{% endblock %}
