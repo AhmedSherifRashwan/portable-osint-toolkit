@@ -1,3 +1,13 @@
+/*
+  Theme variables
+  These CSS custom properties define the primary color palette and sizing for the
+  application.  They are referenced throughout this stylesheet to control
+  backgrounds, text colours, borders and shadows.  The dark theme is
+  defined on the `:root` element; a complementary bright theme is defined
+  further below on the `body.light-mode` selector.  When toggling themes
+  in JavaScript the `light-mode` class is added or removed from the
+  `<body>` element which automatically updates the variables.
+*/
 :root {
   --primary: #0d6efd;
   --secondary: #6c757d;
@@ -5,15 +15,18 @@
   --info: #0dcaf0;
   --warning: #ffc107;
   --danger: #dc3545;
-  --light: #f8f9fa;
-  --dark: #212529;
-  
-  --sidebar-bg: #1a1d29;
-  --sidebar-hover: #2d3142;
-  --sidebar-active: #3d4465;
-  --content-bg: #f5f6fa;
-  --text-light: #f0f0f0;
-  --border-color: #dee2e6;
+  /* Dark theme is the default.  Use dark colours for backgrounds and light
+     colours for text.  These values are overridden in `.light-mode` for
+     the bright theme. */
+  --light: #1e2433;
+  --dark: #f8f9fa;
+
+  --sidebar-bg: #121a2f;
+  --sidebar-hover: #1b2340;
+  --sidebar-active: #24304f;
+  --content-bg: #0d1526;
+  --text-light: #dee2e6;
+  --border-color: #2e3b55;
   
   --shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
   --shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
@@ -22,6 +35,14 @@
   --transition-fast: 0.15s ease-in-out;
   --transition-normal: 0.3s ease-in-out;
   --transition-slow: 0.5s ease-in-out;
+
+  /* Code block colours – these variables are used by the `code` selector
+     below.  Assigning them here allows us to override them for dark mode
+     without touching the element styles.  By default we use a light
+     background with dark text so that inline code and small snippets are
+     clearly legible on a light backdrop. */
+  --code-bg: var(--light);
+  --code-text: var(--dark);
 }
 
 /* Base Styles */
@@ -63,7 +84,9 @@ html {
 /* Sidebar Styles */
 .sidebar {
   width: 260px;
-  background: linear-gradient(135deg, var(--sidebar-bg) 0%, #252a3d 100%);
+  /* Use a solid background colour for the sidebar.  Removing the
+     gradient eliminates the white‑to‑grey effect noted by the user. */
+  background: var(--sidebar-bg);
   color: var(--text-light);
   height: 100vh;
   overflow: hidden;
@@ -192,6 +215,10 @@ html {
   transition: all var(--transition-normal);
   overflow: hidden;
   position: relative;
+  /* Use the light/dark variable for card backgrounds and text so that
+     cards invert cleanly when switching themes. */
+  background-color: var(--light);
+  color: var(--dark);
 }
 
 .card::before {
@@ -285,7 +312,10 @@ html {
   border: 1px solid var(--border-color);
   padding: 0.75rem 1rem;
   transition: all var(--transition-normal);
-  background-color: #fff;
+  /* Forms should follow the theme colours.  Use the same light/dark
+     variables that control cards and tables. */
+  background-color: var(--light);
+  color: var(--dark);
 }
 
 .form-control:focus, .form-select:focus {
@@ -298,7 +328,8 @@ html {
   border-radius: 8px 0 0 8px;
   border: 1px solid var(--border-color);
   background-color: var(--light);
-  color: var(--secondary);
+  /* match text colour to the current theme's primary text colour */
+  color: var(--dark);
 }
 
 /* Alert Enhancements */
@@ -346,9 +377,10 @@ html {
 }
 
 /* Code and Pre Enhancements */
+
 code {
-  background-color: var(--light);
-  color: var(--danger);
+  background-color: var(--code-bg);
+  color: var(--code-text);
   padding: 0.2rem 0.4rem;
   border-radius: 4px;
   font-size: 0.875em;
@@ -356,7 +388,9 @@ code {
 }
 
 pre {
-  background-color: var(--light);
+  /* Preformatted blocks follow the same code colours as inline code. */
+  background-color: var(--code-bg);
+  color: var(--code-text);
   border: 1px solid var(--border-color);
   border-radius: 8px;
   padding: 1rem;
@@ -377,6 +411,53 @@ pre {
   0% { opacity: 1; }
   50% { opacity: 0.5; }
   100% { opacity: 1; }
+}
+
+/*
+  Light mode overrides
+  When the `light-mode` class is present on the `<body>` element, the
+  following custom properties take precedence.  This defines a clean,
+  bright colour palette with dark text on light backgrounds.  The dark
+  theme remains the default in `:root`.
+*/
+body.light-mode {
+  --primary: #0d6efd;
+  --secondary: #6c757d;
+  --success: #198754;
+  --info: #0dcaf0;
+  --warning: #ffc107;
+  --danger: #dc3545;
+  /* restore light/dark for bright theme */
+  --light: #f8f9fa;
+  --dark: #212529;
+  /* sidebar colours for light theme */
+  --sidebar-bg: #ffffff;
+  --sidebar-hover: #f3f4f6;
+  --sidebar-active: #e9eaec;
+  /* page backgrounds */
+  --content-bg: #f5f6fa;
+  --text-light: #495057;
+  --border-color: #dee2e6;
+  /* code colours specific to light mode */
+  --code-bg: #f1f3f5;
+  --code-text: #212529;
+}
+
+/*
+  Text colour overrides to ensure legibility in each theme.  Many templates
+  use Bootstrap's `text-white` and `text-dark` helper classes to set
+  explicit colours.  Without these overrides the colours would not switch
+  automatically when the theme changes.  The rules below invert those
+  classes based on whether the bright theme is active.
+*/
+body.light-mode .text-white,
+body.light-mode .text-light {
+  color: var(--dark) !important;
+}
+
+body:not(.light-mode) .text-dark,
+body:not(.light-mode) .text-secondary {
+  color: var(--dark) !important;
 }
 
 .loading {

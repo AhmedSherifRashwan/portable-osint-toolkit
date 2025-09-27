@@ -85,7 +85,7 @@
               </h6>
               {% for addr in results.bitcoin %}
                 <div class="mb-2">
-                  <code class="d-block p-2 bg-light rounded">{{ addr }}</code>
+                  <code class="d-block p-2 rounded">{{ addr }}</code>
                   <small class="text-muted">
                     <a href="https://blockchair.com/bitcoin/address/{{ addr }}" target="_blank" class="text-decoration-none">
                       <i class="fas fa-external-link-alt me-1"></i>View on Blockchair
@@ -104,7 +104,7 @@
               </h6>
               {% for addr in results.ethereum %}
                 <div class="mb-2">
-                  <code class="d-block p-2 bg-light rounded">{{ addr }}</code>
+                  <code class="d-block p-2 rounded">{{ addr }}</code>
                   <small class="text-muted">
                     <a href="https://etherscan.io/address/{{ addr }}" target="_blank" class="text-decoration-none">
                       <i class="fas fa-external-link-alt me-1"></i>View on Etherscan
@@ -131,7 +131,7 @@
             <div class="row">
               {% for result in results %}
                 <div class="col-md-6 col-lg-4 mb-2">
-                  <code class="d-block p-2 bg-light rounded">{{ result }}</code>
+                  <code class="d-block p-2 rounded">{{ result }}</code>
                 </div>
               {% endfor %}
             </div>

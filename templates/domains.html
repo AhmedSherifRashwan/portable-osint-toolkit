@@ -73,7 +73,7 @@
             <i class="fas fa-code me-1"></i>Show Raw WHOIS
           </button>
           <div id="rawWhois" class="collapse mt-2">
-            <pre class="bg-light p-2 rounded" style="white-space: pre-wrap; font-size: .8rem; max-height: 300px; overflow-y: auto;">{{ whois_data.raw }}</pre>
+            <pre class="p-2 rounded" style="white-space: pre-wrap; font-size: .8rem; max-height: 300px; overflow-y: auto;">{{ whois_data.raw }}</pre>
           </div>
         {% endif %}
       </div>
@@ -109,7 +109,7 @@
             <i class="fas fa-code me-1"></i>Show Raw JSON
           </button>
           <div id="rawRdap" class="collapse mt-2">
-            <pre class="bg-light p-2 rounded" style="white-space: pre-wrap; font-size: .8rem; max-height: 300px; overflow-y: auto;">{{ rdap_result | tojson(indent=2) }}</pre>
+            <pre class="p-2 rounded" style="white-space: pre-wrap; font-size: .8rem; max-height: 300px; overflow-y: auto;">{{ rdap_result | tojson(indent=2) }}</pre>
           </div>
         {% endif %}
       </div>
